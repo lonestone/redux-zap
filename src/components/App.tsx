@@ -4,6 +4,7 @@ import { StoreContext } from 'redux-react-hook'
 import store from '../store'
 import Counter from './Counter'
 import Counter2 from './Counter2'
+import PokemonsList from './PokemonsList'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <div className="App">
           <Counter />
           <Counter2 />
+          <PokemonsList />
         </div>
       </StoreContext.Provider>
     </Provider>
