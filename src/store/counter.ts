@@ -1,8 +1,8 @@
 import { prepareStore } from '../lib'
 
 interface IState {
-  count: number
-  counting: boolean
+  readonly count: number
+  readonly counting: boolean
 }
 
 const initialState: IState = {
