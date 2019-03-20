@@ -22,7 +22,15 @@ export function createReducer<State>(
   return function reducer(state = initialState, action) {
     if (action.type === actionPrefix + namespace) {
       // Transform and return state
-      return action.transform(state)
+      const newPartialState =
+        typeof action.transform === 'function'
+          ? action.transform(state)
+          : action.transform
+      if (typeof newPartialState === 'object') {
+        return { ...state, ...newPartialState }
+      } else {
+        return newPartialState
+      }
     }
     return state
   }
@@ -39,7 +47,12 @@ export function createAction<State, Params extends []>(
     const transformOrIterator = effect.apply(getState()[namespace], params)
 
     // Dispatch actions
-    if (typeof transformOrIterator === 'object') {
+    if (
+      typeof transformOrIterator === 'object' &&
+      transformOrIterator.next &&
+      transformOrIterator.throw &&
+      transformOrIterator.return
+    ) {
       // Iterate asynchronously on actions
       for await (const transform of transformOrIterator) {
         dispatch({ type: actionPrefix + namespace, transform })

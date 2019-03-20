@@ -1,8 +1,10 @@
 import { Action, Reducer } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
+export type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
+
 export interface IAction<State> extends Action<string> {
-  transform: (state: State) => State
+  transform: IStateTransform<State>
 }
 
 export type IThunkAction<State, Params extends []> = (
@@ -38,7 +40,7 @@ export type IRootActionsMap<
 export type IEffect<State, Params extends []> = (
   this: State,
   ...params: Params
-) => ((state: State) => State) | AsyncIterableIterator<(state: State) => State>
+) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>
 
 export type IEffectMap<State, EffectsParams extends any> = {
   [name in keyof EffectsParams]: IEffect<State, EffectsParams[name]>

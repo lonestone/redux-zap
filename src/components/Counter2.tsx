@@ -7,10 +7,11 @@ type IProps = IRootState['counter'] & IDispatchsFromActions<typeof actions.count
 
 class Counter2 extends React.Component<IProps> {
   public render() {
-    const { count, counting, increment, incrementAsync, decrement } = this.props
+    const { count, counting, reset, increment, incrementAsync, decrement } = this.props
     return (
       <div>
         <p>Count: {count}</p>
+        <button onClick={reset}>✖</button>
         <button onClick={decrement}>➖</button>
         <button onClick={() => increment(1)}>➕</button>
         <button onClick={() => increment(3)}>➕3</button>
