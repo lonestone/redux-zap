@@ -13,7 +13,7 @@ import {
 export * from './hooks'
 export * from './interfaces'
 
-const actionPrefix = '@simplestore/'
+export const actionPrefix = '@merdux/'
 
 export function createReducer<State>(
   namespace: string,

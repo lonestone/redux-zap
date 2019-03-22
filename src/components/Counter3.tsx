@@ -1,30 +1,31 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { IConnectProps } from '../lib'
 import { actions, IRootState } from '../store'
 
 type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>
 
-class Counter2 extends React.Component<IProps> {
+class Counter3 extends React.Component<IProps> {
   public render() {
-    const { count, counting, reset, increment, incrementAsync, decrement } = this.props
+    const { reset, increment } = this.props
     return (
       <div>
-        <p>Count: {count}</p>
         <button onClick={reset}>✖</button>
-        <button onClick={decrement}>➖</button>
         <button onClick={() => increment(1)}>➕</button>
-        <button onClick={() => increment(3)}>➕3</button>
-        <button onClick={incrementAsync}>➕5{counting && '⏳'}</button>
       </div>
     )
   }
 }
 
 const mapStateToProps = ({ counter }: IRootState) => ({ ...counter })
-const mapDispatchToProps = actions.counter
+const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, undefined, Action>) => ({
+  reset: () => dispatch(actions.counter.reset()),
+  increment: (n: number) => dispatch(actions.counter.increment(n))
+})
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Counter2)
+)(Counter3)

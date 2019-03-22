@@ -1,18 +1,34 @@
+import {
+  MapDispatchToPropsNonObject,
+  MapDispatchToPropsParam,
+  ResolveThunks
+} from 'react-redux'
 import { Action, Reducer } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
 export type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
 
+export interface IRootState {
+  [namespace: string]: any
+}
+
 export interface IAction<State> extends Action<string> {
   transform: IStateTransform<State>
 }
 
-export type IThunkAction<State, Params extends []> = (
-  ...params: Params
-) => ThunkAction<Promise<void>, State, undefined, IAction<State>>
+export type IReducersMapObject<RootState> = {
+  [namespace in keyof RootState]: Reducer<
+    RootState[namespace],
+    IAction<RootState[namespace]>
+  >
+}
 
-export type IThunkActionsMap<State, ActionsParams extends IActionsParams> = {
-  [name in keyof ActionsParams]: IThunkAction<State, ActionsParams[name]>
+export type IThunkAction<RootState, Params extends []> = (
+  ...params: Params
+) => ThunkAction<Promise<void>, RootState, undefined, IAction<RootState>>
+
+export type IThunkActionsMap<RootState, ActionsParams extends IActionsParams> = {
+  [name in keyof ActionsParams]: IThunkAction<RootState, ActionsParams[name]>
 }
 
 export type IDispatchActionsMap<ActionsParams extends any> = {
@@ -32,7 +48,7 @@ export type IRootActionsMap<
   RootActionsParams extends IRootActionsParams<RootState>
 > = {
   [namespace in keyof RootState]: IThunkActionsMap<
-    RootState[namespace],
+    RootState,
     RootActionsParams[namespace]
   >
 }
@@ -46,22 +62,11 @@ export type IEffectMap<State, EffectsParams extends any> = {
   [name in keyof EffectsParams]: IEffect<State, EffectsParams[name]>
 }
 
-export interface IRootState {
-  [namespace: string]: any
-}
-
-export type IReducersMapObject<RootState> = {
-  [namespace in keyof RootState]: Reducer<
-    RootState[namespace],
-    IAction<RootState[namespace]>
-  >
-}
-
-export type IStoreCreator<State, ActionsParams extends IActionsParams> = (
+export type IStoreCreator<State, ActionsParams extends IActionsParams, RootState = {}> = (
   namespace: string
 ) => {
   initialState: State
-  actions: IThunkActionsMap<State, ActionsParams>
+  actions: IThunkActionsMap<RootState, ActionsParams>
   reducer: Reducer<State, IAction<State>>
 }
 
@@ -104,10 +109,20 @@ export type IRootActionsParamsFromConfig<StoresCreators> = {
     : never
 }
 
-export type IDispatchFromAction<TAction extends IThunkAction<any, any>> = (
-  ...params: Parameters<TAction>
-) => Promise<void>
+/*
+  Interface to get Props from mapStateToProps and mapDispatchToProps
+  Useful to connect a component with full typing
 
-export type IDispatchsFromActions<ActionsMap extends IThunkActionsMap<any, any>> = {
-  [name in keyof ActionsMap]: IDispatchFromAction<ActionsMap[name]>
-}
+  Example:
+  type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>
+*/
+
+export type IConnectProps<
+  mapStateToProps extends (state: IRootState) => any,
+  mapDispatchToProps extends
+    | MapDispatchToPropsParam<any, any>
+    | MapDispatchToPropsNonObject<any, any>
+> = ReturnType<mapStateToProps> &
+  (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any>
+    ? TDispatchProps
+    : ResolveThunks<mapDispatchToProps>)

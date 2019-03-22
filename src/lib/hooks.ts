@@ -1,11 +1,9 @@
 import { useDispatch, useMappedState as useMappedStateBadlyTyped } from 'redux-react-hook'
 import { IDispatchActionsMap, IRootState, IThunkActionsMap } from './interfaces'
 
-export function useMappedState<RootState extends IRootState, Result>(
+export const useMappedState: <RootState extends IRootState, Result>(
   mapState: (state: RootState) => Result
-): Result {
-  return useMappedStateBadlyTyped(mapState)
-}
+) => Result = useMappedStateBadlyTyped
 
 export function useActions<State, ActionsParams>(
   actions: IThunkActionsMap<State, ActionsParams>
@@ -14,7 +12,7 @@ export function useActions<State, ActionsParams>(
   return Object.keys(actions).reduce<IDispatchActionsMap<ActionsParams>>(
     (dispatchActions, name) => ({
       ...dispatchActions,
-      [name]: (...params: any) => dispatch(actions[name](...params)) as any
+      [name]: (...params: any) => dispatch(actions[name](...params))
     }),
     {} as any
   )

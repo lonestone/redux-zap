@@ -2,8 +2,8 @@ import axios from 'axios'
 import { prepareStore } from '../lib'
 
 interface IPokemonListEntry {
-  id: number
-  name: string
+  readonly id: number
+  readonly name: string
 }
 
 interface IState {
