@@ -1,11 +1,23 @@
 {
   "name": "merdux-hooks",
   "version": "0.1.0",
+  "description": "React hooks for Merdux",
+  "keywords": [
+    "redux",
+    "merdux",
+    "react",
+    "hooks"
+  ],
   "license": "MIT",
   "author": "Godefroy <godefroy@lonestone.studio>",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint"
   },
   "dependencies": {
     "redux-react-hook": "^3.2.1"
@@ -21,6 +33,8 @@
     "@types/react-redux": "^7.0.4",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "tslint": "^5.14.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   }
 }

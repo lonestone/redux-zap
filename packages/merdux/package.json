@@ -1,11 +1,22 @@
 {
   "name": "merdux",
   "version": "0.1.0",
+  "description": "An insult to Redux, making it tolerable",
+  "keywords": [
+    "redux",
+    "middleware",
+    "thunk"
+  ],
   "license": "MIT",
   "author": "Godefroy <godefroy@lonestone.studio>",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
@@ -15,6 +26,8 @@
     "@types/react-redux": "^7.0.4",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "tslint": "^5.14.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   }
 }
