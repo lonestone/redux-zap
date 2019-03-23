@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { prepareStore } from '../lib'
+import { prepareStore } from 'merdux'
 
 interface IPokemonListEntry {
   readonly id: number

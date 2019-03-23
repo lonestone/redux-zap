@@ -1,6 +1,6 @@
+import { StoreContext } from 'merdux-hooks'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { StoreContext } from 'redux-react-hook'
 import store from '../store'
 import Counter from './Counter'
 import Counter2 from './Counter2'

@@ -1,6 +1,6 @@
+import { IConnectProps } from 'merdux'
 import React from 'react'
 import { connect } from 'react-redux'
-import { IConnectProps } from '../lib'
 import { actions, IRootState } from '../store'
 
 type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>

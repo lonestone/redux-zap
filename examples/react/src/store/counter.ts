@@ -1,4 +1,4 @@
-import { prepareStore } from '../lib'
+import { prepareStore } from 'merdux'
 
 interface IState {
   readonly count: number

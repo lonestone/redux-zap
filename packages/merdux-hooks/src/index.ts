@@ -1,5 +1,7 @@
 import { useDispatch, useMappedState as useMappedStateBadlyTyped } from 'redux-react-hook'
-import { IDispatchActionsMap, IRootState, IThunkActionsMap } from './interfaces'
+import { IDispatchActionsMap, IRootState, IThunkActionsMap } from 'merdux'
+
+export { StoreContext, useDispatch } from 'redux-react-hook'
 
 export const useMappedState: <RootState extends IRootState, Result>(
   mapState: (state: RootState) => Result

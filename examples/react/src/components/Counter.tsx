@@ -1,5 +1,5 @@
+import { useActions, useMappedState } from 'merdux-hooks'
 import React from 'react'
-import { useActions, useMappedState } from '../lib'
 import { actions, IRootState } from '../store'
 
 export default function Counter() {

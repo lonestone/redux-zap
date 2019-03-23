@@ -10,7 +10,6 @@ import {
   IThunkActionsMap
 } from './interfaces'
 
-export * from './hooks'
 export * from './interfaces'
 
 export const actionPrefix = '@merdux/'
@@ -49,9 +48,9 @@ export function createAction<State, Params extends []>(
     // Dispatch actions
     if (
       typeof transformOrIterator === 'object' &&
-      transformOrIterator.next &&
-      transformOrIterator.throw &&
-      transformOrIterator.return
+      (transformOrIterator as any).next &&
+      (transformOrIterator as any).throw &&
+      (transformOrIterator as any).return
     ) {
       // Iterate asynchronously on actions
       for await (const transform of transformOrIterator) {
