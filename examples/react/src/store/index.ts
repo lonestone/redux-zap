@@ -5,8 +5,8 @@ import counter from './counter'
 import pokemons from './pokemons'
 
 export const { reducers, actions, initialState } = combineStores({
-  pokemons,
-  counter
+  counter,
+  pokemons
 })
 
 export type IRootState = typeof initialState

@@ -11,9 +11,9 @@ const initialState: IState = {
 }
 
 export default prepareStore(initialState, {
-  increment: (n: number) => state => ({ count: state.count + n }),
-  decrement: () => state => ({ count: state.count - 1 }),
   reset: () => ({ count: 0 }),
+  increment: () => state => ({ count: state.count + 1 }),
+  decrement: (n: number) => state => ({ count: state.count - n }),
 
   async *incrementAsync() {
     console.log('count', this.count)

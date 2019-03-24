@@ -1,7 +1,7 @@
 {
   "name": "merdux",
-  "version": "0.1.0",
-  "description": "An insult to Redux, making it tolerable",
+  "version": "0.1.1",
+  "description": "Opinionated redux abstraction to manage stores more easily",
   "keywords": [
     "redux",
     "middleware",
@@ -9,6 +9,10 @@
   ],
   "license": "MIT",
   "author": "Godefroy <godefroy@lonestone.studio>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lonestone/merdux.git"
+  },
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {

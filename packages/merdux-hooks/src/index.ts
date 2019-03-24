@@ -1,5 +1,5 @@
-import { useDispatch, useMappedState as useMappedStateBadlyTyped } from 'redux-react-hook'
 import { IDispatchActionsMap, IRootState, IThunkActionsMap } from 'merdux'
+import { useDispatch, useMappedState as useMappedStateBadlyTyped } from 'redux-react-hook'
 
 export { StoreContext, useDispatch } from 'redux-react-hook'
 

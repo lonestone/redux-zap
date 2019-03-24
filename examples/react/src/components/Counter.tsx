@@ -9,9 +9,9 @@ export default function Counter() {
     <div>
       <p>Count: {count}</p>
       <button onClick={reset}>✖</button>
-      <button onClick={decrement}>➖</button>
-      <button onClick={() => increment(1)}>➕</button>
-      <button onClick={() => increment(3)}>➕3</button>
+      <button onClick={() => decrement(3)}>➖3</button>
+      <button onClick={() => decrement(1)}>➖</button>
+      <button onClick={increment}>➕</button>
       <button onClick={() => incrementAsync().then(() => console.log('done'))}>
         ➕5{counting && '⏳'}
       </button>
