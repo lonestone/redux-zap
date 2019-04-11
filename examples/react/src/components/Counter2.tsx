@@ -1,6 +1,6 @@
-import { IConnectProps } from 'redux-zap'
 import React from 'react'
 import { connect } from 'react-redux'
+import { IConnectProps } from 'redux-zap'
 import { actions, IRootState } from '../store'
 
 type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>

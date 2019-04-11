@@ -1,5 +1,5 @@
-import { useActions, useMappedState } from 'redux-zap-hooks'
 import React, { useEffect } from 'react'
+import { useActions, useMappedState } from 'redux-zap-hooks'
 import { actions, IRootState } from '../store'
 
 export default function PokemonsList() {

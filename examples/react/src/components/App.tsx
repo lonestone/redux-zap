@@ -1,6 +1,6 @@
-import { StoreContext } from 'redux-zap-hooks'
 import React from 'react'
 import { Provider } from 'react-redux'
+import { StoreContext } from 'redux-zap-hooks'
 import store from '../store'
 import Counter from './Counter'
 import Counter2 from './Counter2'

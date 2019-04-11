@@ -1,5 +1,5 @@
-import { IDispatchActionsMap, IRootState, IThunkActionsMap } from 'redux-zap'
 import { useDispatch, useMappedState as useMappedStateBadlyTyped } from 'redux-react-hook'
+import { IDispatchActionsMap, IRootState, IThunkActionsMap } from 'redux-zap'
 
 export { StoreContext, useDispatch } from 'redux-react-hook'
 
