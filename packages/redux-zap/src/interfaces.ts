@@ -8,6 +8,15 @@ import { ThunkAction } from 'redux-thunk'
 
 export type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
 
+export type IZap<State, Params extends []> = (
+  this: State,
+  ...params: Params
+) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>
+
+export type IZapsMap<State, ZapsParams extends any> = {
+  [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>
+}
+
 export interface IRootState {
   [namespace: string]: any
 }
@@ -16,7 +25,7 @@ export interface IAction<State> extends Action<string> {
   transform: IStateTransform<State>
 }
 
-export type IReducersMapObject<RootState> = {
+export type IReducersMap<RootState> = {
   [namespace in keyof RootState]: Reducer<
     RootState[namespace],
     IAction<RootState[namespace]>
@@ -53,15 +62,6 @@ export type IRootActionsMap<
   >
 }
 
-export type IEffect<State, Params extends []> = (
-  this: State,
-  ...params: Params
-) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>
-
-export type IEffectMap<State, EffectsParams extends any> = {
-  [name in keyof EffectsParams]: IEffect<State, EffectsParams[name]>
-}
-
 export type IStoreCreator<State, ActionsParams extends IActionsParams, RootState = {}> = (
   namespace: string
 ) => {
@@ -70,7 +70,7 @@ export type IStoreCreator<State, ActionsParams extends IActionsParams, RootState
   reducer: Reducer<State, IAction<State>>
 }
 
-export type IStoreCreatorMap<
+export type IStoreCreatorsMap<
   RootState extends IRootState,
   RootActionsParams extends IRootActionsParams<RootState>
 > = {
@@ -82,7 +82,7 @@ export type IStoreCreatorMap<
 
 export interface IPreparedStore<StoresCreators> {
   initialState: IRootStateFromConfig<StoresCreators>
-  reducers: IReducersMapObject<IRootStateFromConfig<StoresCreators>>
+  reducers: IReducersMap<IRootStateFromConfig<StoresCreators>>
   actions: IRootActionsMap<
     IRootStateFromConfig<StoresCreators>,
     IRootActionsParamsFromConfig<StoresCreators>
@@ -118,10 +118,10 @@ export type IRootActionsParamsFromConfig<StoresCreators> = {
 */
 
 export type IConnectProps<
-  mapStateToProps extends (state: IRootState) => any,
+  mapStateToProps extends (state: IRootState) => any = () => {},
   mapDispatchToProps extends
     | MapDispatchToPropsParam<any, any>
-    | MapDispatchToPropsNonObject<any, any>
+    | MapDispatchToPropsNonObject<any, any> = {}
 > = ReturnType<mapStateToProps> &
   (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any>
     ? TDispatchProps

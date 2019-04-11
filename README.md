@@ -1,4 +1,4 @@
-# merdux
+# redux-zap
 
-- [Documentation](packages/merdux/README.md)
+- [Documentation](packages/redux-zap/README.md)
 - [Examples](examples)

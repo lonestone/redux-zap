@@ -1,4 +1,4 @@
-import { useActions, useMappedState } from 'merdux-hooks'
+import { useActions, useMappedState } from 'redux-zap-hooks'
 import React from 'react'
 import { actions, IRootState } from '../store'
 

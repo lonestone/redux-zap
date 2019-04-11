@@ -1,12 +1,12 @@
 {
-  "name": "merdux-example",
+  "name": "redux-zap-example",
   "version": "0.1.0",
   "license": "MIT",
   "author": "Godefroy <godefroy@lonestone.studio>",
   "dependencies": {
     "axios": "^0.18.0",
-    "merdux": "^0.1.0",
-    "merdux-hooks": "^0.1.0",
+    "redux-zap": "^0.1.0",
+    "redux-zap-hooks": "^0.1.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-redux": "^6.0.1",

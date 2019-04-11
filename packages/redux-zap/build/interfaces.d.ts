@@ -2,13 +2,17 @@ import { MapDispatchToPropsNonObject, MapDispatchToPropsParam, ResolveThunks } f
 import { Action, Reducer } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 export declare type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>);
+export declare type IZap<State, Params extends []> = (this: State, ...params: Params) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>;
+export declare type IZapsMap<State, ZapsParams extends any> = {
+    [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>;
+};
 export interface IRootState {
     [namespace: string]: any;
 }
 export interface IAction<State> extends Action<string> {
     transform: IStateTransform<State>;
 }
-export declare type IReducersMapObject<RootState> = {
+export declare type IReducersMap<RootState> = {
     [namespace in keyof RootState]: Reducer<RootState[namespace], IAction<RootState[namespace]>>;
 };
 export declare type IThunkAction<RootState, Params extends []> = (...params: Params) => ThunkAction<Promise<void>, RootState, undefined, IAction<RootState>>;
@@ -27,21 +31,17 @@ export declare type IRootActionsParams<RootState extends IRootState> = {
 export declare type IRootActionsMap<RootState extends IRootState, RootActionsParams extends IRootActionsParams<RootState>> = {
     [namespace in keyof RootState]: IThunkActionsMap<RootState, RootActionsParams[namespace]>;
 };
-export declare type IEffect<State, Params extends []> = (this: State, ...params: Params) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>;
-export declare type IEffectMap<State, EffectsParams extends any> = {
-    [name in keyof EffectsParams]: IEffect<State, EffectsParams[name]>;
-};
 export declare type IStoreCreator<State, ActionsParams extends IActionsParams, RootState = {}> = (namespace: string) => {
     initialState: State;
     actions: IThunkActionsMap<RootState, ActionsParams>;
     reducer: Reducer<State, IAction<State>>;
 };
-export declare type IStoreCreatorMap<RootState extends IRootState, RootActionsParams extends IRootActionsParams<RootState>> = {
+export declare type IStoreCreatorsMap<RootState extends IRootState, RootActionsParams extends IRootActionsParams<RootState>> = {
     [namespace in keyof RootState]: IStoreCreator<RootState[namespace], RootActionsParams[namespace]>;
 };
 export interface IPreparedStore<StoresCreators> {
     initialState: IRootStateFromConfig<StoresCreators>;
-    reducers: IReducersMapObject<IRootStateFromConfig<StoresCreators>>;
+    reducers: IReducersMap<IRootStateFromConfig<StoresCreators>>;
     actions: IRootActionsMap<IRootStateFromConfig<StoresCreators>, IRootActionsParamsFromConfig<StoresCreators>>;
 }
 export declare type IRootStateFromConfig<StoresCreators> = {
@@ -54,4 +54,4 @@ export declare type IRootActionsParamsFromConfig<StoresCreators> = {
         actions: IThunkActionsMap<unknown, infer ActionsParams>;
     } ? ActionsParams : never;
 };
-export declare type IConnectProps<mapStateToProps extends (state: IRootState) => any, mapDispatchToProps extends MapDispatchToPropsParam<any, any> | MapDispatchToPropsNonObject<any, any>> = ReturnType<mapStateToProps> & (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any> ? TDispatchProps : ResolveThunks<mapDispatchToProps>);
+export declare type IConnectProps<mapStateToProps extends (state: IRootState) => any = () => {}, mapDispatchToProps extends MapDispatchToPropsParam<any, any> | MapDispatchToPropsNonObject<any, any> = {}> = ReturnType<mapStateToProps> & (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any> ? TDispatchProps : ResolveThunks<mapDispatchToProps>);

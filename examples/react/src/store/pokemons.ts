@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { prepareStore } from 'merdux'
+import { prepareStore } from 'redux-zap'
 
 interface IPokemonListEntry {
   readonly id: number

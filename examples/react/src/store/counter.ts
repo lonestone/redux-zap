@@ -1,4 +1,4 @@
-import { prepareStore } from 'merdux'
+import { prepareStore } from 'redux-zap'
 
 interface IState {
   readonly count: number

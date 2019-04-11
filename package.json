@@ -1,5 +1,5 @@
 {
-  "name": "merdux-workspace",
+  "name": "redux-zap-workspace",
   "private": true,
   "dependencies": {
     "lerna": "^3.13.1"

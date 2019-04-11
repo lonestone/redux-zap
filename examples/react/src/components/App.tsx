@@ -1,4 +1,4 @@
-import { StoreContext } from 'merdux-hooks'
+import { StoreContext } from 'redux-zap-hooks'
 import React from 'react'
 import { Provider } from 'react-redux'
 import store from '../store'

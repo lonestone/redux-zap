@@ -1,4 +1,4 @@
-import { IConnectProps } from 'merdux'
+import { IConnectProps } from 'redux-zap'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Action } from 'redux'

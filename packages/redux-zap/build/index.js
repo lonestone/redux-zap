@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-exports.actionPrefix = '@merdux/';
+exports.actionPrefix = '@redux-zap/';
 function createReducer(namespace, initialState) {
     return function reducer(state, action) {
         if (state === void 0) { state = initialState; }
@@ -21,7 +21,7 @@ function createReducer(namespace, initialState) {
     };
 }
 exports.createReducer = createReducer;
-function createAction(namespace, effect) {
+function createAction(namespace, zap) {
     var _this = this;
     // Create redux-thunk action
     return function () {
@@ -34,7 +34,7 @@ function createAction(namespace, effect) {
             return tslib_1.__generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        transformOrIterator = effect.apply(getState()[namespace], params);
+                        transformOrIterator = zap.apply(getState()[namespace], params);
                         if (!(typeof transformOrIterator === 'object' &&
                             transformOrIterator.next &&
                             transformOrIterator.throw &&
@@ -79,18 +79,18 @@ function createAction(namespace, effect) {
     };
 }
 exports.createAction = createAction;
-function createActions(namespace, effects) {
-    // Iterate on each effect
-    return Object.keys(effects).reduce(function (actions, name) {
+function createActions(namespace, zaps) {
+    // Iterate on each zap
+    return Object.keys(zaps).reduce(function (actions, name) {
         var _a;
-        return (tslib_1.__assign({}, actions, (_a = {}, _a[name] = createAction(namespace, effects[name]), _a)));
+        return (tslib_1.__assign({}, actions, (_a = {}, _a[name] = createAction(namespace, zaps[name]), _a)));
     }, {});
 }
 exports.createActions = createActions;
-function prepareStore(initialState, effects) {
+function prepareStore(initialState, zaps) {
     return function (namespace) { return ({
         initialState: initialState,
-        actions: createActions(namespace, effects),
+        actions: createActions(namespace, zaps),
         reducer: createReducer(namespace, initialState)
     }); };
 }

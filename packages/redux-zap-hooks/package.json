@@ -1,10 +1,10 @@
 {
-  "name": "merdux-hooks",
+  "name": "redux-zap-hooks",
   "version": "0.1.0",
-  "description": "React hooks for Merdux",
+  "description": "React hooks for Redux Zap",
   "keywords": [
     "redux",
-    "merdux",
+    "redux-zap",
     "react",
     "hooks"
   ],
@@ -12,8 +12,9 @@
   "author": "Godefroy <godefroy@lonestone.studio>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lonestone/merdux.git"
+    "url": "git+https://github.com/lonestone/redux-zap.git"
   },
+  "homepage": "https://github.com/lonestone/redux-zap/blob/master/packages/redux-zap/README.md#react-hooks",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -27,7 +28,7 @@
     "redux-react-hook": "^3.2.1"
   },
   "peerDependencies": {
-    "merdux": "^0.1.0"
+    "redux-zap": "^0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

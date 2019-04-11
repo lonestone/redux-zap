@@ -2,17 +2,17 @@ import { Reducer } from 'redux'
 import {
   IAction,
   IActionsParams,
-  IEffect,
-  IEffectMap,
   IPreparedStore,
   IStoreCreator,
   IThunkAction,
-  IThunkActionsMap
+  IThunkActionsMap,
+  IZap,
+  IZapsMap
 } from './interfaces'
 
 export * from './interfaces'
 
-export const actionPrefix = '@merdux/'
+export const actionPrefix = '@redux-zap/'
 
 export function createReducer<State>(
   namespace: string,
@@ -37,13 +37,13 @@ export function createReducer<State>(
 
 export function createAction<State, Params extends []>(
   namespace: string,
-  effect: IEffect<State, Params>
+  zap: IZap<State, Params>
 ): IThunkAction<State, Params> {
   // Create redux-thunk action
   return (...params) => async (dispatch, getState) => {
     // Run action
     // Set current local state as thisArg
-    const transformOrIterator = effect.apply(getState()[namespace], params)
+    const transformOrIterator = zap.apply(getState()[namespace], params)
 
     // Dispatch actions
     if (
@@ -64,14 +64,14 @@ export function createAction<State, Params extends []>(
 
 export function createActions<State, ActionsParams extends IActionsParams>(
   namespace: string,
-  effects: IEffectMap<State, ActionsParams>
+  zaps: IZapsMap<State, ActionsParams>
 ) {
-  // Iterate on each effect
-  return Object.keys(effects).reduce<IThunkActionsMap<State, ActionsParams>>(
+  // Iterate on each zap
+  return Object.keys(zaps).reduce<IThunkActionsMap<State, ActionsParams>>(
     (actions, name) => ({
       ...actions,
-      // Create action from effect
-      [name]: createAction(namespace, effects[name])
+      // Create action from zap
+      [name]: createAction(namespace, zaps[name])
     }),
     {} as any
   )
@@ -79,11 +79,11 @@ export function createActions<State, ActionsParams extends IActionsParams>(
 
 export function prepareStore<State, ActionsParams extends IActionsParams>(
   initialState: State,
-  effects: IEffectMap<State, ActionsParams>
+  zaps: IZapsMap<State, ActionsParams>
 ): IStoreCreator<State, ActionsParams> {
   return (namespace: string) => ({
     initialState,
-    actions: createActions(namespace, effects),
+    actions: createActions(namespace, zaps),
     reducer: createReducer(namespace, initialState)
   })
 }
