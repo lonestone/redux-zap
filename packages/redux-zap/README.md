@@ -42,7 +42,7 @@ npm install redux-zap redux redux-thunk
 
 ## Examples
 
-- [React webapp example](../../tree/master/examples/react)
+- [React webapp example](https://github.com/lonestone/redux-zap/tree/master/examples/react)
 
 ## Usage
 
