@@ -1,4 +1,3 @@
-import { MapDispatchToPropsNonObject, MapDispatchToPropsParam, ResolveThunks } from 'react-redux';
 import { Action, Reducer } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 export declare type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>);
@@ -54,4 +53,3 @@ export declare type IRootActionsParamsFromConfig<StoresCreators> = {
         actions: IThunkActionsMap<unknown, infer ActionsParams>;
     } ? ActionsParams : never;
 };
-export declare type IConnectProps<mapStateToProps extends (state: IRootState) => any = () => {}, mapDispatchToProps extends MapDispatchToPropsParam<any, any> | MapDispatchToPropsNonObject<any, any> = {}> = ReturnType<mapStateToProps> & (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any> ? TDispatchProps : ResolveThunks<mapDispatchToProps>);

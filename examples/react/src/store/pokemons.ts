@@ -30,7 +30,7 @@ export default prepareStore(initialState, {
   }
 })
 
-async function apiCall() {
+async function apiCall(): Promise<IPokemonListEntry[]> {
   const { data } = await axios.get<{
     results: Array<{ name: string; url: string }>
   }>('https://pokeapi.co/api/v2/pokemon/?limit=999')

@@ -6,13 +6,13 @@
 
 - [What is redux-zap, and why?](#What-is-redux-zap-and-why)
 - [Install](#install)
+- [Examples](#examples)
 - [Usage](#usage)
   - [Initial state](#initial-state)
   - [Zaps](#zaps)
   - [Prepare store](#prepare-store)
   - [Add to redux store](#add-to-redux-store)
 - [Connect to React components](#connect-to-react-components)
-- [React hooks](#react-hooks)
 - [FAQ](#faq)
 - [Known drawbacks](#known-drawbacks)
 - [Author](#author)
@@ -28,9 +28,8 @@ With redux-zap, actions and reducers are replaced by simple **zaps**.
 
 Don't worry, Redux Zap is composable with classic actions, reducers and middlewares (thunk, saga, etc). Integration into existing architecture should be a breeze.
 
-⭐ Fully typed  
-🦋 Ultra lightweight  
-📌 Hooks and types provided for use with react-redux  
+⭐ Fully typed
+🦋 Ultra lightweight
 👌 No refactoring is needed for existing redux actions and reducers
 
 _All examples here are in TypeScript, but you can use Javascript by removing types._
@@ -40,6 +39,10 @@ _All examples here are in TypeScript, but you can use Javascript by removing typ
 ```bash
 npm install redux-zap redux redux-thunk
 ```
+
+## Examples
+
+- [React webapp example](../../tree/master/examples/react)
 
 ## Usage
 
@@ -193,94 +196,26 @@ Import from the store file:
 - `actions`: access them by namespace. eg: `actions.counter.increment`
 - `IRootState`: type of the whole store, useful in `mapStateToProps`
 
-Import from redux-zap:
-
-- `IConnectProps`: useful to type props coming from redux
-
 Example of `Counter.tsx`:
 
 ```tsx
-import { IConnectProps } from 'redux-zap'
 import React from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { actions, IRootState } from '../store'
 
-type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>
-
-class Counter extends React.Component<IProps> {
-  public render() {
-    const { count, counting, reset, increment, incrementAsync, decrement } = this.props
-    return (
-      <div>
-        <p>Count: {count}</p>
-        <button onClick={reset}>✖</button>
-        <button onClick={() => decrement(3)}>➖3</button>
-        <button onClick={() => decrement(1)}>➖</button>
-        <button onClick={increment}>➕</button>
-        <button onClick={incrementAsync}>➕5{counting && '⏳'}</button>
-      </div>
-    )
-  }
-}
-
-const mapStateToProps = ({ counter }: IRootState) => ({ ...counter })
-const mapDispatchToProps = actions.counter
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Counter)
-```
-
-## React hooks
-
-Redux Zap provides hooks with the package `redux-zap-hooks`.
-
-It uses [`redux-react-hook`](https://github.com/facebookincubator/redux-react-hook) under the hood and exports all of its exports.
-
-Install it in your project:
-
-```bash
-npm install redux-zap-hooks
-```
-
-To use hooks, you need to provide the store to the StoreContext:
-
-```tsx
-import { StoreContext } from 'redux-zap-hooks'
-import React from 'react'
-import store from '../store'
-import Counter from './Counter'
-
-export default function App() {
-  return (
-    <StoreContext.Provider value={store}>
-      <Counter />
-    </StoreContext.Provider>
-  )
-}
-```
-
-Example of `Counter.tsx`, same as Counter above but with hooks:
-
-```tsx
-import { useActions, useMappedState } from 'redux-zap-hooks'
-import React from 'react'
-import { actions, IRootState } from '../store'
+const { reset, increment, incrementAsync, decrement } = actions.counter
 
 export default function Counter() {
-  const { count, counting } = useMappedState((state: IRootState) => state.counter)
-  const { reset, increment, incrementAsync, decrement } = useActions(actions.counter)
+  const { count, counting } = useSelector((state: IRootState) => state.counter)
+  const dispatch = useDispatch()
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={reset}>✖</button>
-      <button onClick={() => decrement(3)}>➖3</button>
-      <button onClick={() => decrement(1)}>➖</button>
-      <button onClick={increment}>➕</button>
-      <button onClick={incrementAsync)}>
-        ➕5{counting && '⏳'}
-      </button>
+      <button onClick={() => dispatch(reset())}>✖</button>
+      <button onClick={() => dispatch(decrement(3))}>➖3</button>
+      <button onClick={() => dispatch(decrement(1))}>➖</button>
+      <button onClick={() => dispatch(increment())}>➕</button>
+      <button onClick={() => dispatch(incrementAsync())}>➕5{counting && '⏳'}</button>
     </div>
   )
 }

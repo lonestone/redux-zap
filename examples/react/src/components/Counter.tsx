@@ -1,20 +1,20 @@
 import React from 'react'
-import { useActions, useMappedState } from 'redux-zap-hooks'
+import { useDispatch, useSelector } from 'react-redux'
 import { actions, IRootState } from '../store'
 
+const { reset, increment, incrementAsync, decrement } = actions.counter
+
 export default function Counter() {
-  const { count, counting } = useMappedState((state: IRootState) => state.counter)
-  const { reset, increment, incrementAsync, decrement } = useActions(actions.counter)
+  const { count, counting } = useSelector((state: IRootState) => state.counter)
+  const dispatch = useDispatch()
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={reset}>✖</button>
-      <button onClick={() => decrement(3)}>➖3</button>
-      <button onClick={() => decrement(1)}>➖</button>
-      <button onClick={increment}>➕</button>
-      <button onClick={() => incrementAsync().then(() => console.log('done'))}>
-        ➕5{counting && '⏳'}
-      </button>
+      <button onClick={() => dispatch(reset())}>✖</button>
+      <button onClick={() => dispatch(decrement(3))}>➖3</button>
+      <button onClick={() => dispatch(decrement(1))}>➖</button>
+      <button onClick={() => dispatch(increment())}>➕</button>
+      <button onClick={() => dispatch(incrementAsync())}>➕5{counting && '⏳'}</button>
     </div>
   )
 }

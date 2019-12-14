@@ -1,8 +1,3 @@
-import {
-  MapDispatchToPropsNonObject,
-  MapDispatchToPropsParam,
-  ResolveThunks
-} from 'react-redux'
 import { Action, Reducer } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
@@ -108,21 +103,3 @@ export type IRootActionsParamsFromConfig<StoresCreators> = {
     ? ActionsParams
     : never
 }
-
-/*
-  Interface to get Props from mapStateToProps and mapDispatchToProps
-  Useful to connect a component with full typing
-
-  Example:
-  type IProps = IConnectProps<typeof mapStateToProps, typeof mapDispatchToProps>
-*/
-
-export type IConnectProps<
-  mapStateToProps extends (state: IRootState) => any = () => {},
-  mapDispatchToProps extends
-    | MapDispatchToPropsParam<any, any>
-    | MapDispatchToPropsNonObject<any, any> = {}
-> = ReturnType<mapStateToProps> &
-  (mapDispatchToProps extends MapDispatchToPropsNonObject<infer TDispatchProps, any>
-    ? TDispatchProps
-    : ResolveThunks<mapDispatchToProps>)

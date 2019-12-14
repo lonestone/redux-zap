@@ -11,7 +11,7 @@ function createReducer(namespace, initialState) {
                 ? action.transform(state)
                 : action.transform;
             if (typeof newPartialState === 'object') {
-                return tslib_1.__assign({}, state, newPartialState);
+                return tslib_1.__assign(tslib_1.__assign({}, state), newPartialState);
             }
             else {
                 return newPartialState;
@@ -30,7 +30,8 @@ function createAction(namespace, zap) {
             params[_i] = arguments[_i];
         }
         return function (dispatch, getState) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-            var e_1, _a, transformOrIterator, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
+            var transformOrIterator, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
+            var e_1, _a;
             return tslib_1.__generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -83,7 +84,7 @@ function createActions(namespace, zaps) {
     // Iterate on each zap
     return Object.keys(zaps).reduce(function (actions, name) {
         var _a;
-        return (tslib_1.__assign({}, actions, (_a = {}, _a[name] = createAction(namespace, zaps[name]), _a)));
+        return (tslib_1.__assign(tslib_1.__assign({}, actions), (_a = {}, _a[name] = createAction(namespace, zaps[name]), _a)));
     }, {});
 }
 exports.createActions = createActions;
@@ -101,9 +102,9 @@ function combineStores(storeCreators) {
         var _a, _b, _c;
         var store = storeCreators[namespace](namespace);
         return {
-            initialState: tslib_1.__assign({}, stores.initialState, (_a = {}, _a[namespace] = store.initialState, _a)),
-            actions: tslib_1.__assign({}, stores.actions, (_b = {}, _b[namespace] = store.actions, _b)),
-            reducers: tslib_1.__assign({}, stores.reducers, (_c = {}, _c[namespace] = store.reducer, _c))
+            initialState: tslib_1.__assign(tslib_1.__assign({}, stores.initialState), (_a = {}, _a[namespace] = store.initialState, _a)),
+            actions: tslib_1.__assign(tslib_1.__assign({}, stores.actions), (_b = {}, _b[namespace] = store.actions, _b)),
+            reducers: tslib_1.__assign(tslib_1.__assign({}, stores.reducers), (_c = {}, _c[namespace] = store.reducer, _c))
         };
     }, {});
 }

@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import { useActions, useMappedState } from 'redux-zap-hooks'
+import { useDispatch, useSelector } from 'react-redux'
 import { actions, IRootState } from '../store'
 
 export default function PokemonsList() {
-  const { loading, error, list } = useMappedState((state: IRootState) => state.pokemons)
-  const { load } = useActions(actions.pokemons)
+  const { loading, error, list } = useSelector((state: IRootState) => state.pokemons)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!loading && !list) {
-      load()
+    if (!loading) {
+      dispatch(actions.pokemons.load())
     }
   }, [])
 

@@ -1,6 +1,6 @@
 {
   "name": "redux-zap",
-  "version": "0.1.3",
+  "version": "0.2.1",
   "description": "Enjoy coding your redux store, writing less code and harvesting full redux power.",
   "keywords": [
     "redux",
@@ -24,15 +24,9 @@
     "prepublishOnly": "npm run lint"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.3",
-    "@types/react": "^16.8.8",
-    "@types/react-dom": "^16.8.2",
-    "@types/react-redux": "^7.0.4",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.7.3"
   }
 }
