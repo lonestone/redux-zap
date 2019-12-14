@@ -28,8 +28,8 @@ With redux-zap, actions and reducers are replaced by simple **zaps**.
 
 Don't worry, Redux Zap is composable with classic actions, reducers and middlewares (thunk, saga, etc). Integration into existing architecture should be a breeze.
 
-⭐ Fully typed
-🦋 Ultra lightweight
+⭐ Fully typed  
+🦋 Ultra lightweight  
 👌 No refactoring is needed for existing redux actions and reducers
 
 _All examples here are in TypeScript, but you can use Javascript by removing types._
