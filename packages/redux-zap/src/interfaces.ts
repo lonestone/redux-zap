@@ -12,19 +12,10 @@ export type IZapsMap<State, ZapsParams extends any> = {
   [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>
 }
 
-export interface IRootState {
-  [namespace: string]: any
-}
+export type IRootState = Record<string, any>
 
 export interface IAction<State> extends Action<string> {
   transform: IStateTransform<State>
-}
-
-export type IReducersMap<RootState> = {
-  [namespace in keyof RootState]: Reducer<
-    RootState[namespace],
-    IAction<RootState[namespace]>
-  >
 }
 
 export type IThunkAction<RootState, Params extends []> = (
@@ -39,67 +30,114 @@ export type IDispatchActionsMap<ActionsParams extends any> = {
   [name in keyof ActionsParams]: (...params: ActionsParams[name]) => Promise<void>
 }
 
-export interface IActionsParams {
-  [name: string]: any
-}
+export type IActionsParams = Record<string, any>
 
-export type IRootActionsParams<RootState extends IRootState> = {
-  [namespace in keyof RootState]: IActionsParams
-}
-
-export type IRootActionsMap<
-  RootState extends IRootState,
-  RootActionsParams extends IRootActionsParams<RootState>
-> = {
-  [namespace in keyof RootState]: IThunkActionsMap<
-    RootState,
-    RootActionsParams[namespace]
-  >
-}
-
-export type IStoreCreator<State, ActionsParams extends IActionsParams, RootState = {}> = (
+export type IStoreCreator<State, ActionsParams extends IActionsParams> = (
   namespace: string
 ) => {
   initialState: State
-  actions: IThunkActionsMap<RootState, ActionsParams>
+  actions: {
+    [name in keyof ActionsParams]: IThunkAction<unknown, ActionsParams[name]>
+  }
   reducer: Reducer<State, IAction<State>>
 }
 
-export type IStoreCreatorsMap<
-  RootState extends IRootState,
-  RootActionsParams extends IRootActionsParams<RootState>
-> = {
-  [namespace in keyof RootState]: IStoreCreator<
-    RootState[namespace],
-    RootActionsParams[namespace]
-  >
-}
-
-export interface IPreparedStore<StoresCreators> {
-  initialState: IRootStateFromConfig<StoresCreators>
-  reducers: IReducersMap<IRootStateFromConfig<StoresCreators>>
-  actions: IRootActionsMap<
-    IRootStateFromConfig<StoresCreators>,
-    IRootActionsParamsFromConfig<StoresCreators>
-  >
-}
-
-export type IRootStateFromConfig<StoresCreators> = {
-  [namespace in keyof StoresCreators]: StoresCreators[namespace] extends (
-    namespace: string
-  ) => {
-    initialState: infer State
+export interface ISimplePreparedStore<RootState = Record<string, any>> {
+  initialState: RootState
+  reducers: {
+    [namespace in keyof RootState]: Reducer<
+      RootState[namespace],
+      IAction<RootState[namespace]>
+    >
   }
-    ? State
-    : never
+  actions: {
+    [namespace in keyof RootState]: {
+      [name in string]: IThunkAction<RootState, any>
+    }
+  }
 }
 
-export type IRootActionsParamsFromConfig<StoresCreators> = {
-  [namespace in keyof StoresCreators]: StoresCreators[namespace] extends (
-    namespace: string
-  ) => {
-    actions: IThunkActionsMap<unknown, infer ActionsParams>
+// Full IPreparedStore interface
+// export interface IPreparedStore<
+//   StoresCreators extends Record<string, IStoreCreator<any, any>>,
+//   RootState = IRootStateFromConfig<StoresCreators>
+// > extends ISimplePreparedStore {{
+//   initialState: RootState
+//   reducers: IReducersMap<RootState>
+//   actions: IRootActionsMap<RootState, IRootActionsParamsFromConfig<StoresCreators>>
+// }
+
+// export type IRootActionsParams<Namespace extends string> = {
+//   [namespace in Namespace]: IActionsParams
+// }
+
+// export type IRootActionsMap<
+//   RootState extends IRootState,
+//   RootActionsParams extends IRootActionsParams<keyof RootState & string>
+// > = {
+//   [namespace in keyof RootState & string]: IThunkActionsMap<
+//     RootState,
+//     RootActionsParams[namespace]
+//   >
+// }
+
+// export type IReducersMap<RootState> = {
+//   [namespace in keyof RootState]: Reducer<
+//     RootState[namespace],
+//     IAction<RootState[namespace]>
+//   >
+// }
+
+// export type IRootStateFromConfig<StoresCreators> = {
+//   [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<
+//     infer State,
+//     any
+//   >
+//     ? State
+//     : never
+// }
+
+// export type IRootActionsParamsFromConfig<StoresCreators> = {
+//   [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<
+//     any,
+//     infer ActionsParams
+//   >
+//     ? ActionsParams
+//     : never
+// }
+
+// Resolved IPreparedStore interface:
+export interface IPreparedStore<
+  StoresCreators extends Record<string, IStoreCreator<any, any>>,
+  RootState = {
+    [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<
+      infer State,
+      any
+    >
+      ? State
+      : never
   }
-    ? ActionsParams
-    : never
+> extends ISimplePreparedStore {
+  // State
+  initialState: RootState
+  // Reducers
+  reducers: {
+    [namespace in keyof RootState]: Reducer<
+      RootState[namespace],
+      IAction<RootState[namespace]>
+    >
+  }
+  // Actions
+  actions: {
+    [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<
+      any,
+      infer ActionsParams
+    >
+      ? {
+          [name in keyof ActionsParams]: (
+            ...params: ActionsParams[name]
+          ) => ThunkAction<Promise<void>, RootState, undefined, IAction<RootState>>
+        }
+      : never
+  }
 }

@@ -3,6 +3,8 @@ import {
   IAction,
   IActionsParams,
   IPreparedStore,
+  IRootState,
+  ISimplePreparedStore,
   IStoreCreator,
   IThunkAction,
   IThunkActionsMap,
@@ -35,15 +37,16 @@ export function createReducer<State>(
   }
 }
 
-export function createAction<State, Params extends []>(
+export function createAction<RootState, State, Params extends []>(
   namespace: string,
   zap: IZap<State, Params>
-): IThunkAction<State, Params> {
+): IThunkAction<RootState, Params> {
   // Create redux-thunk action
   return (...params) => async (dispatch, getState) => {
     // Run action
     // Set current local state as thisArg
-    const transformOrIterator = zap.apply(getState()[namespace], params)
+    const state: State = getState()[namespace]
+    const transformOrIterator = zap.apply(state, params)
 
     // Dispatch actions
     if (
@@ -62,17 +65,18 @@ export function createAction<State, Params extends []>(
   }
 }
 
-export function createActions<State, ActionsParams extends IActionsParams>(
-  namespace: string,
-  zaps: IZapsMap<State, ActionsParams>
-) {
+export function createActions<
+  State,
+  RootState extends IRootState,
+  ActionsParams extends IActionsParams
+>(namespace: string, zaps: IZapsMap<State, ActionsParams>) {
   // Iterate on each zap
-  return Object.keys(zaps).reduce<IThunkActionsMap<State, ActionsParams>>(
-    (actions, name) => ({
-      ...actions,
+  return Object.keys(zaps).reduce<IThunkActionsMap<RootState, ActionsParams>>(
+    (actions, name: keyof ActionsParams) => {
       // Create action from zap
-      [name]: createAction(namespace, zaps[name])
-    }),
+      actions[name] = createAction(namespace, zaps[name])
+      return actions
+    },
     {} as any
   )
 }
@@ -88,26 +92,22 @@ export function prepareStore<State, ActionsParams extends IActionsParams>(
   })
 }
 
-export function combineStores<StoresCreators>(storeCreators: StoresCreators) {
+export function combineStores<
+  StoresCreators extends Record<string, IStoreCreator<any, any>>
+>(storeCreators: StoresCreators) {
   // Iterate on each store creator
-  return Object.keys(storeCreators).reduce<IPreparedStore<StoresCreators>>(
-    (stores, namespace) => {
+  return Object.keys(storeCreators).reduce(
+    (stores, namespace: keyof StoresCreators & string) => {
       const store = storeCreators[namespace](namespace)
-      return {
-        initialState: {
-          ...stores.initialState,
-          [namespace]: store.initialState
-        },
-        actions: {
-          ...stores.actions,
-          [namespace]: store.actions
-        },
-        reducers: {
-          ...stores.reducers,
-          [namespace]: store.reducer
-        }
-      }
+      stores.initialState[namespace] = store.initialState
+      stores.actions[namespace] = store.actions
+      stores.reducers[namespace] = store.reducer
+      return stores
     },
-    {} as any
-  )
+    {
+      initialState: {},
+      actions: {},
+      reducers: {}
+    } as ISimplePreparedStore
+  ) as IPreparedStore<StoresCreators>
 }

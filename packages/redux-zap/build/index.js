@@ -83,12 +83,13 @@ function createAction(namespace, zap) {
             params[_i] = arguments[_i];
         }
         return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-            var transformOrIterator, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
+            var state, transformOrIterator, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
             var e_1, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        transformOrIterator = zap.apply(getState()[namespace], params);
+                        state = getState()[namespace];
+                        transformOrIterator = zap.apply(state, params);
                         if (!(typeof transformOrIterator === 'object' &&
                             transformOrIterator.next &&
                             transformOrIterator.throw &&
@@ -136,8 +137,9 @@ exports.createAction = createAction;
 function createActions(namespace, zaps) {
     // Iterate on each zap
     return Object.keys(zaps).reduce(function (actions, name) {
-        var _a;
-        return (__assign(__assign({}, actions), (_a = {}, _a[name] = createAction(namespace, zaps[name]), _a)));
+        // Create action from zap
+        actions[name] = createAction(namespace, zaps[name]);
+        return actions;
     }, {});
 }
 exports.createActions = createActions;
@@ -152,13 +154,15 @@ exports.prepareStore = prepareStore;
 function combineStores(storeCreators) {
     // Iterate on each store creator
     return Object.keys(storeCreators).reduce(function (stores, namespace) {
-        var _a, _b, _c;
         var store = storeCreators[namespace](namespace);
-        return {
-            initialState: __assign(__assign({}, stores.initialState), (_a = {}, _a[namespace] = store.initialState, _a)),
-            actions: __assign(__assign({}, stores.actions), (_b = {}, _b[namespace] = store.actions, _b)),
-            reducers: __assign(__assign({}, stores.reducers), (_c = {}, _c[namespace] = store.reducer, _c))
-        };
-    }, {});
+        stores.initialState[namespace] = store.initialState;
+        stores.actions[namespace] = store.actions;
+        stores.reducers[namespace] = store.reducer;
+        return stores;
+    }, {
+        initialState: {},
+        actions: {},
+        reducers: {}
+    });
 }
 exports.combineStores = combineStores;
