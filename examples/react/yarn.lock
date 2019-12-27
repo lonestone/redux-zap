@@ -6880,10 +6880,10 @@ redux-thunk@^2.3.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
-redux-zap@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.1.3.tgz#f6b962bc0c27e3bb10804778cf6b8ac88dfa3ebc"
-  integrity sha512-H5AgD2Obp0vlq0ISJZk+/k3BsGtQ2DeHRW1yXWri6N1T0b6lauHh+ZIN2tLPNw1cjxZZXn/1tATvrGXbnt+tcg==
+redux-zap@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.2.3.tgz#714a50acd0fb64d51709a53194db23e2f643edfe"
+  integrity sha512-LQBUzKaF9GNtGaBnqnez4VuLrTF67I9TfYqUzjxzDcUlQ0m2zieTtAA74XXgOAEOZAVkm4RPmnwXzsws8RmZwg==
 
 redux@^4.0.0:
   version "4.0.1"
