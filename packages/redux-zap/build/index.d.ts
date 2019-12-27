@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import './asynciterator-polyfill';
 import { IAction, IActionsParams, IPreparedStore, IRootState, IStoreCreator, IThunkAction, IThunkActionsMap, IZap, IZapsMap } from './interfaces';
 export * from './interfaces';
 export declare const actionPrefix = "@redux-zap/";

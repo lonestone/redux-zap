@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import './asynciterator-polyfill'
 import {
   IAction,
   IActionsParams,

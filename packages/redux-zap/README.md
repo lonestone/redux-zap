@@ -40,6 +40,17 @@ _All examples here are in TypeScript, but you can use Javascript by removing typ
 npm install redux-zap redux redux-thunk
 ```
 
+If you're using TypeScript, add `"esnext.asynciterable"` to `lib` in tsconfig.ts:
+
+```json
+{
+  "lib": ["es6", "dom", "esnext.asynciterable"],
+  ...
+}
+```
+
+Don't worry about browser compatibility, a polyfill is included to run AsyncIterators.
+
 ## Examples
 
 - [React webapp example](https://github.com/lonestone/redux-zap/tree/master/examples/react)
@@ -274,12 +285,15 @@ To set a new state computed with values from the current state, use an state tra
 }
 ```
 
-If you need to access the current local state to perform a side effect, you can, but try to avoid it if possible. All zaps are bound to the local state, so you can access it with `this`.
+If you need to access the current local state to perform a side effect, you can, but **try to avoid it if possible**. All zaps are bound to the local state, so you can access it with `this`.
 
 ```ts
 {
-  // this = current local state
-  zapExample: () => console.log('count', this.count)
+  zapExample() {
+    // this = current local state
+    console.log('count', this.count)
+    return { count: this.count + 1 }
+  },
 }
 ```
 

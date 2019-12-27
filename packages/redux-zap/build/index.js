@@ -54,6 +54,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./asynciterator-polyfill");
 exports.actionPrefix = '@redux-zap/';
 function createReducer(namespace, initialState) {
     return function reducer(state, action) {

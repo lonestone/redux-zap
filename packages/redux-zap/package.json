@@ -1,6 +1,6 @@
 {
   "name": "redux-zap",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Enjoy coding your redux store, writing less code and harvesting full redux power.",
   "keywords": [
     "redux",
