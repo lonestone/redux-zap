@@ -27,6 +27,7 @@
   "devDependencies": {
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
+    "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.3"
   }
