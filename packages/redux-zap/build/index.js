@@ -55,11 +55,17 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./asynciterator-polyfill");
-exports.actionPrefix = '@redux-zap/';
+// Overridable prefix for action types
+var actionPrefix = '';
+function setActionPrefix(prefix) {
+    actionPrefix = prefix;
+}
+exports.setActionPrefix = setActionPrefix;
 function createReducer(namespace, initialState) {
+    var actionType = actionPrefix + namespace + '/';
     return function reducer(state, action) {
         if (state === void 0) { state = initialState; }
-        if (action.type === exports.actionPrefix + namespace) {
+        if (action.type.indexOf(actionType) === 0) {
             // Transform and return state
             var newPartialState = typeof action.transform === 'function'
                 ? action.transform(state)
@@ -75,8 +81,9 @@ function createReducer(namespace, initialState) {
     };
 }
 exports.createReducer = createReducer;
-function createAction(namespace, zap) {
+function createAction(namespace, name, zap) {
     var _this = this;
+    var actionType = actionPrefix + namespace + '/' + name;
     // Create redux-thunk action
     return function () {
         var params = [];
@@ -84,7 +91,7 @@ function createAction(namespace, zap) {
             params[_i] = arguments[_i];
         }
         return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-            var state, transformOrIterator, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
+            var state, transformOrIterator, count, transformOrIterator_1, transformOrIterator_1_1, transform, e_1_1;
             var e_1, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -95,6 +102,7 @@ function createAction(namespace, zap) {
                             transformOrIterator.next &&
                             transformOrIterator.throw &&
                             transformOrIterator.return)) return [3 /*break*/, 13];
+                        count = 0;
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 6, 7, 12]);
@@ -104,7 +112,8 @@ function createAction(namespace, zap) {
                     case 3:
                         if (!(transformOrIterator_1_1 = _b.sent(), !transformOrIterator_1_1.done)) return [3 /*break*/, 5];
                         transform = transformOrIterator_1_1.value;
-                        dispatch({ type: exports.actionPrefix + namespace, transform: transform });
+                        dispatch({ type: actionType + '/' + count, transform: transform });
+                        count++;
                         _b.label = 4;
                     case 4: return [3 /*break*/, 2];
                     case 5: return [3 /*break*/, 12];
@@ -126,7 +135,7 @@ function createAction(namespace, zap) {
                     case 11: return [7 /*endfinally*/];
                     case 12: return [3 /*break*/, 14];
                     case 13:
-                        dispatch({ type: exports.actionPrefix + namespace, transform: transformOrIterator });
+                        dispatch({ type: actionType, transform: transformOrIterator });
                         _b.label = 14;
                     case 14: return [2 /*return*/];
                 }
@@ -139,7 +148,7 @@ function createActions(namespace, zaps) {
     // Iterate on each zap
     return Object.keys(zaps).reduce(function (actions, name) {
         // Create action from zap
-        actions[name] = createAction(namespace, zaps[name]);
+        actions[name] = createAction(namespace, name, zaps[name]);
         return actions;
     }, {});
 }

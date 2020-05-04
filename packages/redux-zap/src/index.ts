@@ -15,14 +15,19 @@ import {
 
 export * from './interfaces'
 
-export const actionPrefix = '@redux-zap/'
+// Overridable prefix for action types
+let actionPrefix = ''
+export function setActionPrefix(prefix: string) {
+  actionPrefix = prefix
+}
 
 export function createReducer<State>(
   namespace: string,
   initialState: State
 ): Reducer<State, IAction<State>> {
+  const actionType = actionPrefix + namespace + '/'
   return function reducer(state = initialState, action) {
-    if (action.type === actionPrefix + namespace) {
+    if (action.type.indexOf(actionType) === 0) {
       // Transform and return state
       const newPartialState =
         typeof action.transform === 'function'
@@ -40,8 +45,11 @@ export function createReducer<State>(
 
 export function createAction<RootState, State, Params extends []>(
   namespace: string,
+  name: string,
   zap: IZap<State, Params>
 ): IThunkAction<RootState, Params> {
+  const actionType = actionPrefix + namespace + '/' + name
+
   // Create redux-thunk action
   return (...params) => async (dispatch, getState) => {
     // Run action
@@ -57,11 +65,13 @@ export function createAction<RootState, State, Params extends []>(
       (transformOrIterator as any).return
     ) {
       // Iterate asynchronously on actions
+      let count = 0
       for await (const transform of transformOrIterator) {
-        dispatch({ type: actionPrefix + namespace, transform })
+        dispatch({ type: actionType + '/' + count, transform })
+        count++
       }
     } else {
-      dispatch({ type: actionPrefix + namespace, transform: transformOrIterator })
+      dispatch({ type: actionType, transform: transformOrIterator })
     }
   }
 }
@@ -75,7 +85,7 @@ export function createActions<
   return Object.keys(zaps).reduce<IThunkActionsMap<RootState, ActionsParams>>(
     (actions, name: keyof ActionsParams) => {
       // Create action from zap
-      actions[name] = createAction(namespace, zaps[name])
+      actions[name] = createAction(namespace, name as string, zaps[name])
       return actions
     },
     {} as any
