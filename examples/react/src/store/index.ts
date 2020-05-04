@@ -9,7 +9,7 @@ export const { reducers, actions, initialState } = combineStores({
   pokemons
 })
 
-export type IRootState = typeof initialState
+export type RootState = typeof initialState
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 

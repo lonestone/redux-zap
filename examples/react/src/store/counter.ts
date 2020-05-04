@@ -1,11 +1,11 @@
 import { prepareStore } from 'redux-zap'
 
-interface IState {
+interface State {
   readonly count: number
   readonly counting: boolean
 }
 
-const initialState: IState = {
+const initialState: State = {
   count: 0,
   counting: false
 }

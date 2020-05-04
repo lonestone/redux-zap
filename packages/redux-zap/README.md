@@ -64,12 +64,12 @@ A store is made of an initial state and zaps.
 Example of the initial state of a counter:
 
 ```ts
-interface IState {
+interface State {
   readonly count: number
   readonly counting: boolean
 }
 
-const initialState: IState = {
+const initialState: State = {
   count: 0,
   counting: false
 }
@@ -97,11 +97,11 @@ Types provided:
 ```ts
 type StateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
 
-type IZapReturn<State> =
-  | IStateTransform<State>
-  | AsyncIterableIterator<IStateTransform<State>>
+type ZapReturn<State> =
+  | StateTransform<State>
+  | AsyncIterableIterator<StateTransform<State>>
 
-type Zap<State, Params extends []> = (this: State, ...params: Params) => IZapReturn<State>
+type Zap<State, Params extends []> = (this: State, ...params: Params) => ZapReturn<State>
 ```
 
 Example of zaps for our counter example:
@@ -145,12 +145,12 @@ Example of `counter.ts` store:
 ```ts
 import { prepareStore } from 'redux-zap'
 
-interface IState {
+interface State {
   readonly count: number
   readonly counting: boolean
 }
 
-const initialState: IState = {
+const initialState: State = {
   count: 0,
   counting: false
 }
@@ -194,7 +194,7 @@ export const { reducers, actions, initialState } = combineStores({
 })
 
 // Obtain and export full type of the root state
-export type IRootState = typeof initialState
+export type RootState = typeof initialState
 
 export default createStore(combineReducers(reducers), applyMiddleware(thunk))
 ```
@@ -213,12 +213,12 @@ Example of `Counter.tsx`:
 ```tsx
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { actions, IRootState } from '../store'
+import { actions, RootState } from '../store'
 
 const { reset, increment, incrementAsync, decrement } = actions.counter
 
 export default function Counter() {
-  const { count, counting } = useSelector((state: IRootState) => state.counter)
+  const { count, counting } = useSelector((state: RootState) => state.counter)
   const dispatch = useDispatch()
   return (
     <div>
@@ -254,15 +254,15 @@ import { combineStores } from 'redux-zap'
 // Counter store written with Redux Zap
 import counter from './counter'
 // Counter store written in a classic way
-import classicCounter, { IState as IClassicCounterState } from './classic-counter'
+import classicCounter, { State as ClassicCounterState } from './classic-counter'
 
 export const { reducers, actions, initialState } = combineStores({
   counter
 })
 
 // Combine root state type from zaps with other states (if you're using Typescript)
-export type IRootState = typeof initialState & {
-  classicCounter: IClassicCounterState
+export type RootState = typeof initialState & {
+  classicCounter: ClassicCounterState
 }
 
 export default createStore(
@@ -305,7 +305,7 @@ If you need to access the current local state to perform a side effect, you can,
 To call a zap from another zap, you need to create it outside the zaps map provided to `prepareStore`.
 
 ```ts
-const add = (n: number) => (state: IState) => ({ count: state.count + n })
+const add = (n: number) => (state: State) => ({ count: state.count + n })
 
 export default prepareStore(initialState, {
   add,
@@ -319,12 +319,12 @@ You cannot use `this` to access other zaps because all zaps are bound to their l
 You can also reuse async generators zaps:
 
 ```ts
-async function* add(n: number): IZapReturn<IState> {
+async function* add(n: number): ZapReturn<State> {
   for (let i = 0; i < n; i++) {
     // Wait for 1s
     await new Promise(resolve => setTimeout(resolve, 1000))
     // Increment state
-    yield (state: IState) => ({ count: state.count + 1 })
+    yield state => ({ count: state.count + 1 })
   }
 }
 

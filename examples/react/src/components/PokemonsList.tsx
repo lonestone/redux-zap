@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { actions, IRootState } from '../store'
+import { actions, RootState } from '../store'
 
 export default function PokemonsList() {
-  const { loading, error, list } = useSelector((state: IRootState) => state.pokemons)
+  const { loading, error, list } = useSelector((state: RootState) => state.pokemons)
   const dispatch = useDispatch()
 
   useEffect(() => {

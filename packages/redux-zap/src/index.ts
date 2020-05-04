@@ -1,19 +1,19 @@
 import { Reducer } from 'redux'
 import './asynciterator-polyfill'
 import {
-  IAction,
-  IActionsParams,
-  IPreparedStore,
-  IRootState,
-  ISimplePreparedStore,
-  IStoreCreator,
-  IThunkAction,
-  IThunkActionsMap,
-  IZap,
-  IZapsMap
+  GenericActionsParams,
+  GenericRootState,
+  PreparedStore,
+  SimplePreparedStore,
+  StoreCreator,
+  ThunkActionCreatorsMap,
+  Zap,
+  ZapAction,
+  ZapActionCreator,
+  ZapsMap
 } from './interfaces'
 
-export { IStateTransform, IZap, IZapReturn } from './interfaces'
+export { StateTransform, Zap, ZapReturn } from './interfaces'
 
 // Overridable prefix for action types
 let actionPrefix = ''
@@ -24,7 +24,7 @@ export function setActionPrefix(prefix: string) {
 function createReducer<State>(
   namespace: string,
   initialState: State
-): Reducer<State, IAction<State>> {
+): Reducer<State, ZapAction<State>> {
   const actionType = actionPrefix + namespace + '/'
   return function reducer(state = initialState, action) {
     if (action.type.indexOf(actionType) === 0) {
@@ -46,8 +46,8 @@ function createReducer<State>(
 function createAction<RootState, State, Params extends []>(
   namespace: string,
   name: string,
-  zap: IZap<State, Params>
-): IThunkAction<RootState, Params> {
+  zap: Zap<State, Params>
+): ZapActionCreator<RootState, Params> {
   const actionType = actionPrefix + namespace + '/' + name
 
   // Create redux-thunk action
@@ -78,11 +78,11 @@ function createAction<RootState, State, Params extends []>(
 
 function createActions<
   State,
-  RootState extends IRootState,
-  ActionsParams extends IActionsParams
->(namespace: string, zaps: IZapsMap<State, ActionsParams>) {
+  RootState extends GenericRootState,
+  ActionsParams extends GenericActionsParams
+>(namespace: string, zaps: ZapsMap<State, ActionsParams>) {
   // Iterate on each zap
-  return Object.keys(zaps).reduce<IThunkActionsMap<RootState, ActionsParams>>(
+  return Object.keys(zaps).reduce<ThunkActionCreatorsMap<RootState, ActionsParams>>(
     (actions, name: keyof ActionsParams) => {
       // Create action from zap
       actions[name] = createAction(namespace, name as string, zaps[name])
@@ -92,10 +92,10 @@ function createActions<
   )
 }
 
-export function prepareStore<State, ActionsParams extends IActionsParams>(
+export function prepareStore<State, ActionsParams extends GenericActionsParams>(
   initialState: State,
-  zaps: IZapsMap<State, ActionsParams>
-): IStoreCreator<State, ActionsParams> {
+  zaps: ZapsMap<State, ActionsParams>
+): StoreCreator<State, ActionsParams> {
   return (namespace: string) => ({
     initialState,
     actions: createActions(namespace, zaps),
@@ -104,7 +104,7 @@ export function prepareStore<State, ActionsParams extends IActionsParams>(
 }
 
 export function combineStores<
-  StoresCreators extends Record<string, IStoreCreator<any, any>>
+  StoresCreators extends Record<string, StoreCreator<any, any>>
 >(storeCreators: StoresCreators) {
   // Iterate on each store creator
   return Object.keys(storeCreators).reduce(
@@ -119,6 +119,6 @@ export function combineStores<
       initialState: {},
       actions: {},
       reducers: {}
-    } as ISimplePreparedStore
-  ) as IPreparedStore<StoresCreators>
+    } as SimplePreparedStore
+  ) as PreparedStore<StoresCreators>
 }

@@ -1,51 +1,51 @@
 import { Action, Reducer } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-export declare type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>);
-export declare type IZapReturn<State> = IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>;
-export declare type IZap<State, Params extends []> = (this: State, ...params: Params) => IZapReturn<State>;
-export declare type IZapsMap<State, ZapsParams extends any> = {
-    [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>;
+export declare type StateTransform<State> = Partial<State> | ((state: State) => Partial<State>);
+export declare type ZapReturn<State> = StateTransform<State> | AsyncIterableIterator<StateTransform<State>>;
+export declare type Zap<State, Params extends []> = (this: State, ...params: Params) => ZapReturn<State>;
+export declare type ZapsMap<State, ZapsParams extends any> = {
+    [name in keyof ZapsParams]: Zap<State, ZapsParams[name]>;
 };
-export declare type IRootState = Record<string, any>;
-export interface IAction<State> extends Action<string> {
-    transform: IStateTransform<State>;
+export declare type GenericRootState = Record<string, any>;
+export interface ZapAction<State> extends Action<string> {
+    transform: StateTransform<State>;
 }
-export declare type IThunkAction<RootState, Params extends []> = (...params: Params) => ThunkAction<Promise<void>, RootState, undefined, IAction<RootState>>;
-export declare type IThunkActionsMap<RootState, ActionsParams extends IActionsParams> = {
-    [name in keyof ActionsParams]: IThunkAction<RootState, ActionsParams[name]>;
+export declare type ZapActionCreator<RootState, Params extends []> = (...params: Params) => ThunkAction<Promise<void>, RootState, undefined, ZapAction<RootState>>;
+export declare type ThunkActionCreatorsMap<RootState, ActionsParams extends GenericActionsParams> = {
+    [name in keyof ActionsParams]: ZapActionCreator<RootState, ActionsParams[name]>;
 };
-export declare type IDispatchActionsMap<ActionsParams extends any> = {
+export declare type DispatchActionsMap<ActionsParams extends any> = {
     [name in keyof ActionsParams]: (...params: ActionsParams[name]) => Promise<void>;
 };
-export declare type IActionsParams = Record<string, any>;
-export declare type IStoreCreator<State, ActionsParams extends IActionsParams> = (namespace: string) => {
+export declare type GenericActionsParams = Record<string, any>;
+export declare type StoreCreator<State, ActionsParams extends GenericActionsParams> = (namespace: string) => {
     initialState: State;
     actions: {
-        [name in keyof ActionsParams]: IThunkAction<unknown, ActionsParams[name]>;
+        [name in keyof ActionsParams]: ZapActionCreator<unknown, ActionsParams[name]>;
     };
-    reducer: Reducer<State, IAction<State>>;
+    reducer: Reducer<State, ZapAction<State>>;
 };
-export interface ISimplePreparedStore<RootState = Record<string, any>> {
+export interface SimplePreparedStore<RootState = GenericRootState> {
     initialState: RootState;
     reducers: {
-        [namespace in keyof RootState]: Reducer<RootState[namespace], IAction<RootState[namespace]>>;
+        [namespace in keyof RootState]: Reducer<RootState[namespace], ZapAction<RootState[namespace]>>;
     };
     actions: {
         [namespace in keyof RootState]: {
-            [name in string]: IThunkAction<RootState, any>;
+            [name in string]: ZapActionCreator<RootState, any>;
         };
     };
 }
-export interface IPreparedStore<StoresCreators extends Record<string, IStoreCreator<any, any>>, RootState = {
-    [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<infer State, any> ? State : never;
-}> extends ISimplePreparedStore {
+export interface PreparedStore<StoresCreators extends Record<string, StoreCreator<any, any>>, RootState = {
+    [namespace in keyof StoresCreators]: StoresCreators[namespace] extends StoreCreator<infer State, any> ? State : never;
+}> extends SimplePreparedStore {
     initialState: RootState;
     reducers: {
-        [namespace in keyof RootState]: Reducer<RootState[namespace], IAction<RootState[namespace]>>;
+        [namespace in keyof RootState]: Reducer<RootState[namespace], ZapAction<RootState[namespace]>>;
     };
     actions: {
-        [namespace in keyof StoresCreators]: StoresCreators[namespace] extends IStoreCreator<any, infer ActionsParams> ? {
-            [name in keyof ActionsParams]: (...params: ActionsParams[name]) => ThunkAction<Promise<void>, RootState, undefined, IAction<RootState>>;
+        [namespace in keyof StoresCreators]: StoresCreators[namespace] extends StoreCreator<any, infer ActionsParams> ? {
+            [name in keyof ActionsParams]: (...params: ActionsParams[name]) => ThunkAction<Promise<void>, RootState, undefined, Action<RootState>>;
         } : never;
     };
 }

@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { actions, IRootState } from '../store'
+import { actions, RootState } from '../store'
 
 const { reset, increment, incrementAsync, decrement } = actions.counter
 
 export default function Counter() {
-  const { count, counting } = useSelector((state: IRootState) => state.counter)
+  const { count, counting } = useSelector((state: RootState) => state.counter)
   const dispatch = useDispatch()
   return (
     <div>

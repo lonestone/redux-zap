@@ -1,18 +1,18 @@
 import axios from 'axios'
 import { prepareStore } from 'redux-zap'
 
-interface IPokemonListEntry {
+interface PokemonListEntry {
   readonly id: number
   readonly name: string
 }
 
-interface IState {
+interface State {
   readonly loading: boolean
   readonly error: string | undefined
-  readonly list: IPokemonListEntry[] | undefined
+  readonly list: PokemonListEntry[] | undefined
 }
 
-const initialState: IState = {
+const initialState: State = {
   loading: false,
   error: undefined,
   list: undefined
@@ -30,7 +30,7 @@ export default prepareStore(initialState, {
   }
 })
 
-async function apiCall(): Promise<IPokemonListEntry[]> {
+async function apiCall(): Promise<PokemonListEntry[]> {
   const { data } = await axios.get<{
     results: Array<{ name: string; url: string }>
   }>('https://pokeapi.co/api/v2/pokemon/?limit=999')
