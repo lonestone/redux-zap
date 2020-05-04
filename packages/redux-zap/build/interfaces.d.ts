@@ -1,7 +1,8 @@
 import { Action, Reducer } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 export declare type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>);
-export declare type IZap<State, Params extends []> = (this: State, ...params: Params) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>;
+export declare type IZapReturn<State> = IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>;
+export declare type IZap<State, Params extends []> = (this: State, ...params: Params) => IZapReturn<State>;
 export declare type IZapsMap<State, ZapsParams extends any> = {
     [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>;
 };

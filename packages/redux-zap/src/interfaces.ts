@@ -3,10 +3,14 @@ import { ThunkAction } from 'redux-thunk'
 
 export type IStateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
 
+export type IZapReturn<State> =
+  | IStateTransform<State>
+  | AsyncIterableIterator<IStateTransform<State>>
+
 export type IZap<State, Params extends []> = (
   this: State,
   ...params: Params
-) => IStateTransform<State> | AsyncIterableIterator<IStateTransform<State>>
+) => IZapReturn<State>
 
 export type IZapsMap<State, ZapsParams extends any> = {
   [name in keyof ZapsParams]: IZap<State, ZapsParams[name]>

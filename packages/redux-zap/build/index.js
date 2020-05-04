@@ -80,7 +80,6 @@ function createReducer(namespace, initialState) {
         return state;
     };
 }
-exports.createReducer = createReducer;
 function createAction(namespace, name, zap) {
     var _this = this;
     var actionType = actionPrefix + namespace + '/' + name;
@@ -143,7 +142,6 @@ function createAction(namespace, name, zap) {
         }); };
     };
 }
-exports.createAction = createAction;
 function createActions(namespace, zaps) {
     // Iterate on each zap
     return Object.keys(zaps).reduce(function (actions, name) {
@@ -152,7 +150,6 @@ function createActions(namespace, zaps) {
         return actions;
     }, {});
 }
-exports.createActions = createActions;
 function prepareStore(initialState, zaps) {
     return function (namespace) { return ({
         initialState: initialState,

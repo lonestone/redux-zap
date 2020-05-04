@@ -13,7 +13,7 @@ import {
   IZapsMap
 } from './interfaces'
 
-export * from './interfaces'
+export { IStateTransform, IZap, IZapReturn } from './interfaces'
 
 // Overridable prefix for action types
 let actionPrefix = ''
@@ -21,7 +21,7 @@ export function setActionPrefix(prefix: string) {
   actionPrefix = prefix
 }
 
-export function createReducer<State>(
+function createReducer<State>(
   namespace: string,
   initialState: State
 ): Reducer<State, IAction<State>> {
@@ -43,7 +43,7 @@ export function createReducer<State>(
   }
 }
 
-export function createAction<RootState, State, Params extends []>(
+function createAction<RootState, State, Params extends []>(
   namespace: string,
   name: string,
   zap: IZap<State, Params>
@@ -76,7 +76,7 @@ export function createAction<RootState, State, Params extends []>(
   }
 }
 
-export function createActions<
+function createActions<
   State,
   RootState extends IRootState,
   ActionsParams extends IActionsParams

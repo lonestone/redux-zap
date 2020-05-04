@@ -97,10 +97,11 @@ Types provided:
 ```ts
 type StateTransform<State> = Partial<State> | ((state: State) => Partial<State>)
 
-type Zap<State, Params extends []> = (
-  this: State,
-  ...params: Params
-) => StateTransform<State> | AsyncIterableIterator<StateTransform<State>>
+type IZapReturn<State> =
+  | IStateTransform<State>
+  | AsyncIterableIterator<IStateTransform<State>>
+
+type Zap<State, Params extends []> = (this: State, ...params: Params) => IZapReturn<State>
 ```
 
 Example of zaps for our counter example:
@@ -318,7 +319,7 @@ You cannot use `this` to access other zaps because all zaps are bound to their l
 You can also reuse async generators zaps:
 
 ```ts
-async function* add(n: number): AsyncIterableIterator<IStateTransform<IState>> {
+async function* add(n: number): IZapReturn<IState> {
   for (let i = 0; i < n; i++) {
     // Wait for 1s
     await new Promise(resolve => setTimeout(resolve, 1000))
