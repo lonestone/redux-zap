@@ -6001,9 +6001,9 @@ path-key@^2.0.0:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.5, path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-to-regexp@0.1.7:
   version "0.1.7"
@@ -6880,10 +6880,10 @@ redux-thunk@^2.3.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
-redux-zap@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.2.3.tgz#714a50acd0fb64d51709a53194db23e2f643edfe"
-  integrity sha512-LQBUzKaF9GNtGaBnqnez4VuLrTF67I9TfYqUzjxzDcUlQ0m2zieTtAA74XXgOAEOZAVkm4RPmnwXzsws8RmZwg==
+redux-zap@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.3.1.tgz#6907b6e5273db96a70a6bd102669aa8219c0453c"
+  integrity sha512-OPndEEfbm9ch/LyOEgjC5udGZCgVUlU5i6QtDztIyr4rov/oYeT5ig+9/x7XqF6WY3Wv00Ox2RrUxxLQh6L+ZA==
 
 redux@^4.0.0:
   version "4.0.1"
