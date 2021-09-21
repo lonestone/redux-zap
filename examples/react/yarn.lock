@@ -6880,10 +6880,10 @@ redux-thunk@^2.3.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
-redux-zap@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.2.3.tgz#714a50acd0fb64d51709a53194db23e2f643edfe"
-  integrity sha512-LQBUzKaF9GNtGaBnqnez4VuLrTF67I9TfYqUzjxzDcUlQ0m2zieTtAA74XXgOAEOZAVkm4RPmnwXzsws8RmZwg==
+redux-zap@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/redux-zap/-/redux-zap-0.3.1.tgz#6907b6e5273db96a70a6bd102669aa8219c0453c"
+  integrity sha512-OPndEEfbm9ch/LyOEgjC5udGZCgVUlU5i6QtDztIyr4rov/oYeT5ig+9/x7XqF6WY3Wv00Ox2RrUxxLQh6L+ZA==
 
 redux@^4.0.0:
   version "4.0.1"
@@ -7944,9 +7944,9 @@ tmp@^0.0.33:
     os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
